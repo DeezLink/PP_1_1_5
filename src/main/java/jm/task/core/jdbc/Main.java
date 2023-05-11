@@ -1,5 +1,6 @@
 package jm.task.core.jdbc;
 
+import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
 
@@ -8,23 +9,33 @@ import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
-        UserService userService = new UserServiceImpl();
-//  Создание таблицы user
-        userService.createUsersTable();
 
-//  Добавление 4 user в таблицу
-        userService.saveUser("Misha", "Petrov", (byte) 20);
-        userService.saveUser("Bato", "Ebloev", (byte) 25);
-        userService.saveUser("Rulon", "Oboev", (byte) 31);
-        userService.saveUser("Tregul", "Zaurov", (byte) 38);
+        User user1 = new User("Misha", "Petrov", (byte) 20);
+        User user2 = new User("Bato", "Ebloev", (byte) 25);
+        User user3 = new User("Rulon", "Oboev", (byte) 31);
+        User user4 = new User("Tregul", "Zaurov", (byte) 38);
 
-//  Вывод всех юзеров из таблицы в консоль
-        System.out.println(userService.getAllUsers().toString());
-//  Удаление юзера по ID
-        userService.removeUserById(1);
-//  Очистка таблицы
-        userService.cleanUsersTable();
-//  Удаление таблицы из БД
-        userService.dropUsersTable();
+        UserService userDaoHibernate = new UserServiceImpl();
+
+        userDaoHibernate.dropUsersTable();
+        userDaoHibernate.createUsersTable();
+        userDaoHibernate.saveUser(user1.getName(), user1.getLastName(), user1.getAge());
+        System.out.println("User with name - " + user1.getName() + " " + user1.getLastName() + " is added to the database");
+
+        userDaoHibernate.saveUser(user2.getName(), user2.getLastName(), user2.getAge());
+        System.out.println("User with name - " + user2.getName() + " " + user2.getLastName() + " added to database");
+
+        userDaoHibernate.saveUser(user3.getName(), user3.getLastName(), user3.getAge());
+        System.out.println("User with name - " + user3.getName() + " " + user3.getLastName() + " added to database");
+
+        userDaoHibernate.saveUser(user4.getName(), user4.getLastName(), user4.getAge());
+        System.out.println("User with name - " + user4.getName() + " " + user4.getLastName() + " added to database");
+
+        for (int i = 0; i < userDaoHibernate.getAllUsers().size(); i++) {
+            System.out.println(userDaoHibernate.getAllUsers().get(i));
+        }
+
+        userDaoHibernate.cleanUsersTable();
+        userDaoHibernate.dropUsersTable();
     }
 }
