@@ -80,6 +80,6 @@ public class Util {
     }
 
     public static void closeFactory() {
-        factory.close();
+        getSessionFactory().close();
     }
 }
